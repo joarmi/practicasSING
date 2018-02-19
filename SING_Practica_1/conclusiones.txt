@@ -1,0 +1,16 @@
+estructura de la memoria:
+-------------------------
+BD paralela -> con tantos procesadores 'p' se paraleliza la consulta con 'p' hilos
+
+1- introduccion de conceptos (transaccion, speed-up, eficiencia, coste y todo lo que pueda ser)
+	estaria guay describir un poco la maquina
+	
+2- discusion de RO/RW
+
+	2.1- no transaccional a su bola (bien explicado porque no sigue la definicion de transaccion)
+	
+	2.2- discusiones sobre trans_RO/RW
+		usar de corte la eficiencia para marcar bueno/malo (pto inflexion) y ahi empezar a soltar conclusiones
+	
+	2.3 conclusiones generales
+		por tanto, es escalable hasta esta cantidad de hilos taltaltal
