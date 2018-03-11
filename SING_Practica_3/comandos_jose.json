@@ -1,0 +1,245 @@
+
+Ejercicio 8:
+total:
+> db.municipios.aggregate(
+	[
+		{
+			$match:
+			{
+				"comunidad":"Valencia"
+			}
+		},
+		{
+			$group:
+			{
+				_id:  "$comunidad",
+				totales: { $sum: "$habitantes" },
+				hombres: { $sum: "$varones" },
+				mujeres: { $sum: "$mujeres" }
+			}
+		}
+	]
+)
+{ "_id" : "Valencia", "totales" : 5094675, "hombres" : 2537898, "mujeres" : 2556777 }  
+
+
+
+
+ejercicio 13:
+comando:
+db.municipios.aggregate(
+[
+	{
+		$group:
+		{
+			_id:  "$comunidad",
+			totales: { $sum: "$habitantes" }
+		}
+	}
+]
+)
+
+salida:
+{ "_id" : "Murcia", "totales" : 1446520 }
+{ "_id" : "Extremadura", "totales" : 1102410 }
+{ "_id" : "Madrid", "totales" : 6386932 }
+{ "_id" : "Islas Baleares", "totales" : 1095426 }
+{ "_id" : "Galicia", "totales" : 2796089 }
+{ "_id" : "Valencia", "totales" : 5094675 }
+{ "_id" : "Cantabria", "totales" : 589235 }
+{ "_id" : "Catalunya", "totales" : 7475420 }
+{ "_id" : "Castilla León", "totales" : 2563521 }
+{ "_id" : "Castilla La Mancha", "totales" : 2081313 }
+{ "_id" : "Ceuta y Melilla", "totales" : 152134 }
+{ "_id" : "Aragón", "totales" : 1345473 }
+{ "_id" : "Canarias", "totales" : 2103992 }
+{ "_id" : "Navarra", "totales" : 630578 }
+{ "_id" : "País Vasco", "totales" : 2172175 }
+{ "_id" : "Asturias", "totales" : 1085289 }
+{ "_id" : "La Rioja", "totales" : 321702 }
+{ "_id" : "Andalucía", "totales" : 8302923 } 
+
+
+
+ejercicio 14:
+db.municipios.aggregate(
+	[
+		{
+			$group:
+			{
+				_id: null,			
+				
+				totales: { $sum: "$habitantes" },
+				hombres: { $sum: "$varones" },
+				mujeres: { $sum: "$mujeres" }
+			}
+		}
+	]
+)
+{ "_id" : null, "totales" : 46745807, "hombres" : 23116988, "mujeres" : 23628819 }
+
+
+Ejercicio 15:
+comando:
+db.municipios.aggregate(
+[
+	{
+		$group:
+		{
+			_id:  "$comunidad",
+			totales: { $sum: "$habitantes" }
+		}
+	},
+	{
+		$match:
+		{
+			totales : {$gte : 4000000}
+		}
+	}
+]
+)
+
+salida:
+{ "_id" : "Madrid", "totales" : 6386932 }
+{ "_id" : "Valencia", "totales" : 5094675 }
+{ "_id" : "Catalunya", "totales" : 7475420 }
+{ "_id" : "Andalucía", "totales" : 8302923 } 
+
+
+Ejercicio 16:
+db.municipios.aggregate(
+[
+	{
+		$group:
+		{
+			_id:  "$provincia",
+			promedio_habitantes: { $avg: "$habitantes" }
+		}
+	}
+]
+)
+
+{ "_id" : "Castelló", "promedio_habitantes" : 4461.488888888889 }
+{ "_id" : "Álava", "promedio_habitantes" : 6153.313725490196 }
+{ "_id" : "Madrid", "promedio_habitantes" : 35681.1843575419 }
+{ "_id" : "Pontevedra", "promedio_habitantes" : 15480.064516129032 }
+{ "_id" : "Ourense", "promedio_habitantes" : 3648.282608695652 }
+{ "_id" : "Murcia", "promedio_habitantes" : 32144.88888888889 }
+{ "_id" : "Lugo", "promedio_habitantes" : 5301.417910447762 }
+{ "_id" : "Badajoz", "promedio_habitantes" : 4199.859756097561 }
+{ "_id" : "Melilla", "promedio_habitantes" : 73460 }
+{ "_id" : "Ceuta", "promedio_habitantes" : 78674 }
+{ "_id" : "Cáceres", "promedio_habitantes" : 1888.7351598173516 }
+{ "_id" : "Girona", "promedio_habitantes" : 3383.628959276018 }
+{ "_id" : "Guipúzcoa", "promedio_habitantes" : 8019.295454545455 }
+{ "_id" : "Barcelona", "promedio_habitantes" : 17646.093247588426 }
+{ "_id" : "Illes Balears", "promedio_habitantes" : 16349.641791044776 }
+{ "_id" : "Segovia", "promedio_habitantes" : 788.7751196172248 }
+{ "_id" : "Alacant", "promedio_habitantes" : 13595.829787234043 }
+{ "_id" : "Ávila", "promedio_habitantes" : 692.258064516129 }
+{ "_id" : "León", "promedio_habitantes" : 2370.4691943127964 }
+{ "_id" : "Burgos", "promedio_habitantes" : 1012.2991913746631 }
+
+Ejercicio 17:
+comando:
+
+db.municipios.aggregate(
+[
+	{
+		$group:
+		{
+			_id:  "$comunidad",
+			P_maximo: {
+				$first: "$poblacion"
+			},
+			habitantes_MX : {$max : "$habitantes"},
+			
+			P_minimo: {
+				$last: "$poblacion"
+			},
+			habitantes_MN : {$min : "$habitantes"}
+			
+		}
+	}
+]
+)
+
+salida:
+{ "_id" : "Murcia", "P_maximo" : "Abanilla", "habitantes_MX" : 436870, "P_minimo" : "Yecla", "habitantes_MN" : 584 }
+{ "_id" : "Extremadura", "P_maximo" : "Acedera", "habitantes_MX" : 148334, "P_minimo" : "Zorita", "habitantes_MN" : 68 }
+{ "_id" : "Madrid", "P_maximo" : "Acebeda, la", "habitantes_MX" : 3255944, "P_minimo" : "Zarzalejo", "habitantes_MN" : 49 }
+{ "_id" : "Islas Baleares", "P_maximo" : "Alaior", "habitantes_MX" : 401270, "P_minimo" : "Vilafranca de bonany", "habitantes_MN" : 280 }
+{ "_id" : "Galicia", "P_maximo" : "Abegondo", "habitantes_MX" : 297332, "P_minimo" : "Vilanova de arousa", "habitantes_MN" : 210 }
+{ "_id" : "Valencia", "P_maximo" : "Adsubia", "habitantes_MX" : 814208, "P_minimo" : "Zarra", "habitantes_MN" : 18 }
+{ "_id" : "Cantabria", "P_maximo" : "Alfoz de lloredo", "habitantes_MX" : 182700, "P_minimo" : "Voto", "habitantes_MN" : 64 }
+{ "_id" : "Catalunya", "P_maximo" : "Abrera", "habitantes_MX" : 1621537, "P_minimo" : "Xerta", "habitantes_MN" : 29 }
+{ "_id" : "Castilla León", "P_maximo" : "Adanero", "habitantes_MX" : 317864, "P_minimo" : "Zamora", "habitantes_MN" : 7 }
+{ "_id" : "Castilla La Mancha", "P_maximo" : "Abengibre", "habitantes_MX" : 169716, "P_minimo" : "Yuncos", "habitantes_MN" : 5 }
+{ "_id" : "Ceuta y Melilla", "P_maximo" : "Ceuta", "habitantes_MX" : 78674, "P_minimo" : "Melilla", "habitantes_MN" : 73460 }
+{ "_id" : "Aragón", "P_maximo" : "Abiego", "habitantes_MX" : 674317, "P_minimo" : "Zuera", "habitantes_MN" : 10 }
+{ "_id" : "Canarias", "P_maximo" : "Agaete", "habitantes_MX" : 381847, "P_minimo" : "Villa de mazo", "habitantes_MN" : 680 }
+{ "_id" : "Navarra", "P_maximo" : "Abáigar", "habitantes_MX" : 198491, "P_minimo" : "Zúñiga", "habitantes_MN" : 18 }
+{ "_id" : "País Vasco", "P_maximo" : "Alegría-dulantzi", "habitantes_MX" : 354860, "P_minimo" : "Ziortza-bolibar", "habitantes_MN" : 95 }
+{ "_id" : "Asturias", "P_maximo" : "Allande", "habitantes_MX" : 277554, "P_minimo" : "Yernes y tameza", "habitantes_MN" : 185 }
+{ "_id" : "La Rioja", "P_maximo" : "Ábalos", "habitantes_MX" : 152107, "P_minimo" : "Zorraquín", "habitantes_MN" : 9 }
+{ "_id" : "Andalucía", "P_maximo" : "Abla", "habitantes_MX" : 703206, "P_minimo" : "Viso del alcor, el", "habitantes_MN" : 52 }
+
+
+Ejercicio 18:
+comando:
+
+db.municipios.aggregate(
+[
+	{
+		$group:
+		{
+			_id:  "$provincia",
+			P_maximo: {
+				$first: "$poblacion"
+			},
+			habitantes_MX : {$max : "$habitantes"},
+			
+			P_minimo: {
+				$last: "$poblacion"
+			},
+			habitantes_MN : {$min : "$habitantes"}
+			
+		}
+	}
+]
+)
+salida
+{ "_id" : "Castelló", "P_maximo" : "Aín", "habitantes_MX" : 180005, "P_minimo" : "Zucaina", "habitantes_MN" : 18 }
+{ "_id" : "Álava", "P_maximo" : "Alegría-dulantzi", "habitantes_MX" : 235661, "P_minimo" : "Zuia", "habitantes_MN" : 176 }
+{ "_id" : "Madrid", "P_maximo" : "Acebeda, la", "habitantes_MX" : 3255944, "P_minimo" : "Zarzalejo", "habitantes_MN" : 49 }
+{ "_id" : "Pontevedra", "P_maximo" : "Agolada", "habitantes_MX" : 297332, "P_minimo" : "Vilanova de arousa", "habitantes_MN" : 726 }
+{ "_id" : "Ourense", "P_maximo" : "Allariz", "habitantes_MX" : 107742, "P_minimo" : "Xunqueira de espadanedo", "habitantes_MN" : 479 }
+{ "_id" : "Murcia", "P_maximo" : "Abanilla", "habitantes_MX" : 436870, "P_minimo" : "Yecla", "habitantes_MN" : 584 }
+{ "_id" : "Lugo", "P_maximo" : "Abadín", "habitantes_MX" : 96678, "P_minimo" : "Xove", "habitantes_MN" : 210 }
+(...........)
+
+Ejercicio 19:
+comando:
+db.municipios.aggregate(
+	[
+		{
+			$group:
+			{
+				_id:  "$provincia",
+				'poblaciones' : {$sum : 1}
+			}
+		},
+		{
+			$sort:
+			{
+				'poblaciones' : -1
+			}
+		}
+	]
+)
+
+
+
+salida:
+
+
