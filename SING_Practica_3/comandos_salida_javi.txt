@@ -1,0 +1,33 @@
+Ejercicio 11:
+
+comando:
+db.municipios.find({"zip":null})
+
+salida:
+{ "_id" : ObjectId("5a9ff3dce805bf36011c198e"), "comunidad" : "Andalucía", "provincia" : "Almería", "poblacion" : "Santa cruz de marchena", "localizacion" : [ 37.0172, -2.603768 ], "altitud" : 328.974, "habitantes" : 232, "varones" : 119, "mujeres" : 113 }
+{ "_id" : ObjectId("5a9ff3dce805bf36011c199b"), "comunidad" : "Andalucía", "provincia" : "Almería", "poblacion" : "Tres villas, las", "localizacion" : [ 37.13334, -2.7 ], "altitud" : 693.093, "habitantes" : 656, "varones" : 349, "mujeres" : 307 }
+{ "_id" : ObjectId("5a9ff3dce805bf36011c19be"), "comunidad" : "Andalucía", "provincia" : "Cádiz", "poblacion" : "Medina-sidonia", "localizacion" : [ 36.46768, -5.927894 ], "altitud" : 246.037, "habitantes" : 11683, "varones" : 6010, "mujeres" : 5673 }
+...
+
+--------------------------------------------------------
+
+Ejercicio 12
+
+ ---- Nombre del municipio más septentrional:
+
+comando:
+db.municipios.find({},{"poblacion":1, "_id":0}).sort({"localizacion":-1}).limit(1)
+
+salida:
+{ "poblacion" : "Mañón" }
+
+ ---- Comunidad con el municipio más meridional:
+
+comando:
+db.municipios.find({},{"comunidad":1, "_id":0}).sort({"localizacion":1}).limit(1)
+
+salida:
+{ "comunidad" : "Canarias" }
+
+--------------------------------------------------------
+
