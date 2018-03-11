@@ -1,0 +1,195 @@
+pregunta, consulta y resultado.
+---------------------------------
+
+Ejercicio 1:
+
+comando y salida:
+[sing07@boe practica2]$ mongoimport --db sing07 --collection municipios --drop --file municipios.json
+connected to: 127.0.0.1
+2018-03-07T15:13:35.959+0100 dropping: sing07.municipios
+2018-03-07T15:13:36.073+0100 check 9 8112
+2018-03-07T15:13:36.207+0100 imported 8112 objects
+
+
+-------------------------------------------------------
+
+
+Ejercicio 2:
+comandos:
+municipio = ({
+		"comunidad" : "Valencia",
+		"provincia" : "Valencia",
+		"poblacion" : "Camelot",
+		"localizacion" : {
+			"latitud" : 0.000000,
+			"longutd" : 0.000000
+		},
+		"altitud" : 0.0,
+		"habitantes" : 14,
+		"varones" : 13,
+		"mujeres" : 1,
+		"zip" : [
+			46999
+		]
+   })
+
+db.municipios.insert(
+   municipio
+)
+
+salida:
+WriteResult({ "nInserted" : 1 })
+
+
+Ejercicio 3:
+
+comando:
+db.municipios.update(
+	{"poblacion" : "Camelot"},
+	{$set : {"habitantes": 15, "mujeres":2}}
+)
+
+salida:
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+
+Ejercicio 4:
+comando:
+db.municipios.update( { "poblacion" : "Vinaròs",   }, { $set : {"zip" : [ 12500 ] }} )
+
+resultado:
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+
+Ejercicio 5:
+
+comando:
+db.municipios.remove(
+	{ "poblacion" : "Camelot"}
+)
+
+resultados:
+WriteResult({ "nRemoved" : 1 })
+
+
+Ejercicio 6:
+comando:
+db.municipios.find(
+	{"provincia" : "Barcelona"}
+).count()
+
+salida:
+311
+
+
+Ejercicio 7
+comando y salida:
+ db.municipios.distinct("comunidad")
+[
+        "Andalucía",
+        "Aragón",
+        "Asturias",
+        "Canarias",
+        "Cantabria",
+        "Castilla La Mancha",
+        "Castilla León",
+        "Catalunya",
+        "Ceuta y Melilla",
+        "Extremadura",
+        "Galicia",
+        "Islas Baleares",
+        "La Rioja",
+        "Madrid",
+        "Murcia",
+        "Navarra",
+        "País Vasco",
+        "Valencia"
+]
+
+comando y salida:
+
+> db.municipios.distinct("provincia")
+[
+        "Almería",
+        "Cádiz",
+        "Córdoba",
+        "Granada",
+        "Huelva",
+        "Jaén",
+        "Málaga",
+        "Sevilla",
+        "Huesca",
+        "Teruel",
+        "Zaragoza",
+        "Asturias",
+        "Las Palmas",
+        "Santa Cruz de Tenerife",
+        "Cantabria",
+        "Albacete",
+        "Ciudad Real",
+        "Cuenca",
+        "Guadalajara",
+        "Toledo",
+        "Ávila",
+        "Burgos",
+        "León",
+        "Palencia",
+        "Salamanca",
+        "Segovia",
+        "Soria",
+        "Valladolid",
+        "Zamora",
+        "Barcelona",
+        "Girona",
+        "Lleida",
+        "Tarragona",
+        "Ceuta",
+        "Melilla",
+        "Badajoz",
+        "Cáceres",
+        "A Coruña",
+        "Lugo",
+        "Ourense",
+        "Pontevedra",
+        "Illes Balears",
+        "La Rioja",
+        "Madrid",
+        "Murcia",
+        "Navarra",
+        "Álava",
+        "Guipúzcoa",
+        "Vizcaya",
+        "Alacant",
+        "Castelló",
+        "València"
+]
+
+
+Ejercicio 8:
+
+consulta y salida de habitantes totales:
+
+
+consulta y salida de habitantes totales hombres:
+
+consulta y salida de habitantes totales mujeres:
+
+
+
+Ejercicio 9:
+comando:
+db.municipios.find(
+	{"provincia" : "Barcelona"}
+).count()
+
+salida:
+311
+
+
+Ejercicio 10:
+db.municipios.find().sort({"altitud":-1}).limit(1)
+
+salida
+{ "_id" : ObjectId("5a9ff38fe805bf36011bfc98"), "comunidad" : "Aragón", "provincia" : "Huesca", "poblacion" : "Aisa", "localizacion" : [ 42.68278, 0.616944 ], "altitud" : 1818.995, "habitantes" : 394, "varones" : 220, "mujeres" : 174, "zip" : [ 22860 ] }
+
+
