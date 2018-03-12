@@ -234,12 +234,20 @@ db.municipios.aggregate(
 			{
 				'poblaciones' : -1
 			}
-		}
+		},
+		{"$limit": 1}
 	]
 )
 
 
 
 salida:
+{ "_id" : "Burgos", "poblaciones" : 371 }
 
 
+Ejercicio 20:
+comando:
+db.dropDatabase()
+
+salida:
+{ "dropped" : "sing07", "ok" : 1 }
