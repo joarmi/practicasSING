@@ -1,0 +1,246 @@
+Javier Argente Micó
+Jose Lluch Palop
+
+Practica 4 Cassandra
+
+1.1)
+
+CREATE  KEYSPACE IF NOT EXISTS killrvideo 
+   WITH REPLICATION = { 
+      'class' : 'SimpleStrategy', 'replication_factor' : 1 };
+	  
+	  
+1.2)
+
+CREATE TABLE killrvideo.videos (
+   video_id timeuuid, 
+   added_date timestamp, 
+   description text,
+   title text,
+   user_id uuid,
+   PRIMARY KEY (video_id));
+   
+   
+1.3)
+
+COPY videos FROM 'C:\Users\alumno\Desktop\archivos_killrvideo\videos.csv' WITH HEADER=true;
+
+
+1.4)
+
+select * from videos limit 10;
+
+
+1.5)
+
+select count (*) from videos;
+
+
+1.6)
+
+select * from videos where title=’Big Data Challenges’ allow filtering;
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+2.1)
+
+CREATE TABLE killrvideo.videos_by_title_year (
+   Title text,
+   added_year int,
+   added_date timestamp,
+   Description text,
+   user_id uuid,
+   video_id uuid,
+   PRIMARY KEY (Title, added_year));
+   
+   
+2.2)
+
+COPY videos_by_title_year FROM 'C:\Users\alumno\Desktop\archivos_killrvideo\videos_by_title_year.csv' WITH HEADER=true;
+
+
+2.3)
+
+select * from videos_by_title_year where title=’Introduction To Apache Cassandra’ and added_year=2014 allow filtering;
+
+
+2.4)
+
+select * from videos_by_title_year where added_year=2014 allow filtering;
+
+
+2.5)
+
+select * from videos_by_title_year where title=’AzureDev’ allow filtering;
+
+
+2.6)
+
+DROP TABLE killrvideo.videos_by_title_year;
+
+CREATE TABLE killrvideo.videos_by_title_year (
+   Title text,
+   added_year int,
+   added_date timestamp,
+   Description text,
+   user_id uuid,
+   video_id uuid,
+   PRIMARY KEY ((Title, added_year)));
+   
+La consulta 2.4 y 2.5 no se pueden realizar porque busca por una clave que no existe ya que se trata de una clave compuesta formada por title y added_date.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+3.1)
+
+CREATE TABLE killrvideo.videos_by_tag_year(
+   tag text,
+   added_year int,
+   video_id timeuuid,
+   added_date timestamp,
+   description text,
+   title text,
+   user_id uuid,
+   PRIMARY KEY ((tag), added_year, video_id)
+) WITH CLUSTERING ORDER BY (added_year desc, video_id asc);
+
+Se ha escogido esa clave primaria porque seguramente se hagan búsquedas de videos por nombre, etiqueta asociada o año de incorporación.
+
+
+3.2)
+
+COPY videos FROM 'C:\Users\alumno\Desktop\archivos_killrvideo\videos_by_tag_year.csv' WITH HEADER=true;
+
+
+3.3)
+
+SELECT COUNT(*) FROM videos_by_tag_year;
+
+
+3.4)
+ 
+select * from videos_by_tag_year where tag='trailer' and added_year = 2015;
+
+
+3.5)
+
+select * from videos_by_tag_year where tag='cql' and added_year < 2015;
+
+
+3.6)
+
+select * from videos_by_tag_year where tag='spark' and added_year < 2015;
+
+
+3.7)
+
+select * from videos_by_tag_year where added_year < 2015 allow filtering;  
+
+
+3.8)
+
+Para que todas las consultas, obligatoriamente, devuelvan la etiqueta
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+4.1)
+ 
+truncate table videos;  
+
+
+4.2)
+ 
+alter table videos add tags set<text>;
+
+
+4.3) 
+
+copy videos from 'C:\Users\alumno\Desktop\archivos_killrvideo\videos_with_tags.csv' with header=true;                                                                                                                 
+
+
+4.4) 
+
+create type video_encoding (encoding text, height int, width int, big_rates set<text>);
+
+
+
+4.5) 
+
+alter table videos add encoding frozen<video_encoding>; 
+
+
+4.6) 
+
+copy videos (video_id, encoding) from 'C:\Users\alumno\Desktop\archivos_killrvideo\videos_with_tags.csv' with header=true; 
+
+4.7) 
+
+select title, tags, encoding from videos limit 5;
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+5.1)
+
+CREATE TABLE killrvideo.videos_count_by_tag (
+   tag text,
+   added_year int,
+   video_count counter,
+   PRIMARY KEY ((tag, added_year)));
+   
+   
+5.2)
+
+SOURCE 'C:\Users\alumno\Desktop\archivos_killrvideo\videos_count_by_tag.cql'
+
+
+5.3)
+
+select added_year, video_count from videos_count_by_tag where tag='cassandra' and added_year in (2013,2014,2015);
+
+
+5.4)
+
+UPDATE videos_count_by_tag SET video_count = video_count + 1 WHERE tag = 'cassandra' AND added_year = 2015;
+
+
+5.5)
+
+select video_count from videos_count_by_tag where tag='cassandra' and added_year=2015;
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+6.1) 
+
+create table videos_by_actor (
+	actor text, 
+	added_date timestamp, 
+	video_id timeuuid, 
+	character_name text, 
+	description text, 
+	encoding frozen<video_encoding>, 
+	tags set<text>, 
+	title text, 
+	user_id uuid, 
+	primary key((actor), added_date, video_id, character_name)) 
+	with clustering 
+	order by (added_date DESC, video_id ASC, character_name ASC); 
+
+
+6.2) 
+
+copy videos_by_actor from 'C:\Users\alumno\videos_by_actor.csv' with header=true;
+
+
+6.3) 
+
+select title, character_name from videos_by_actor where actor='Tom Hanks';
+
+
+6.4) 
+
+select title, added_date from videos_by_actor where actor = 'Tom Hanks' limit 10;
+
+Se ordena primero por la fecha y después por fecha y por orden alfabético.
